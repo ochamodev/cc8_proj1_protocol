@@ -1,0 +1,3 @@
+*.log.*
+*:Zone.Identifier
+bin/
