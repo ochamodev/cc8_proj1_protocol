@@ -54,25 +54,37 @@ public class ClientHandler implements Runnable {
 
             reader.read(reqBody);
             String requestBodyString = new String(reqBody);
-            LOGGER.log(Level.INFO, "[Request]\n\r" + requestBuilder.toString().trim()); 
+            LOGGER.log(Level.INFO, "[Request]\n\r" + requestBuilder.toString().trim());
             LOGGER.log(Level.INFO, "[RequestBody]" + requestBodyString);
             var reqHandler = new RequestHandler(LOGGER);
-            var reqObj = reqHandler.handleRequest(requestBuilder.toString().trim()); 
-            var responseGenerator = new ResponseHandler(LOGGER);
+            var reqObj = reqHandler.handleRequest(requestBuilder.toString().trim());
 
-            var response = responseGenerator.createResponse(reqObj, requestBodyString);
-            LOGGER.log(Level.INFO, "[response] \n" + response.getResponseString());
-            writer.println(response.getResponseString());
-            // implementación protodo aquí de imagenes
-            
-            if (response.getResponseBody() != null) {
-                outputStream.write(response.getResponseBody());
+            if (reqObj.isHermesRequest()) {
+                var responseGenerator = new ResponseHandler(LOGGER);
+
+                var response = responseGenerator.createResponse(reqObj, requestBodyString);
+                LOGGER.log(Level.INFO, "[response] \n" + response.getResponseString());
+                writer.println(response.getResponseString());
+                // implementación protodo aquí de imagenes
+
+                /*
+                 * if (response.getResponseBody() != null) {
+                 * outputStream.write(response.getResponseBody());
+                 * }
+                 */
+
+                if (response.getResponseBody() != null) {
+                    outputStream.write(response.getResponseBody());
+                }
+            } else {
+                HermesServerSide hermesServerSide = new HermesServerSide(LOGGER, outputStream)
             }
+
             reader.close();
             writer.close();
             clientSocket.close();
         } catch (IOException e) {
-        	LOGGER.log(Level.WARNING, "Error: " + e.getMessage() );
+            LOGGER.log(Level.WARNING, "Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

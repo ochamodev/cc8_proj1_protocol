@@ -1,3 +1,9 @@
-public record RequestObj(String method, String path, String httpVersion, String type) {
+public record RequestObj(
+    String method,
+    String path,
+    String httpVersion,
+    String type,
+    boolean isHermesRequest
+    ) {
 
 }

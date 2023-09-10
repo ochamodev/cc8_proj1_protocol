@@ -45,11 +45,16 @@ public class RequestHandler {
             type = MimeTypes.PNG_TYPE;
         }
         LOGGER.log(Level.INFO, "[pathWithoutSplit]: " + path);
+        boolean useHermes = false;
         if (path.contains("?")) {
+            String params = path.split("\\?")[1];
             path = path.split("\\?")[0];
+            useHermes = params.contains("hermes=true");
             LOGGER.log(Level.INFO, "[pathWithSplit]: " + path);
+            LOGGER.log(Level.INFO, "[params]" +params);
         }
-        var req = new RequestObj(method, path, httpVersion, type);
+
+        var req = new RequestObj(method, path, httpVersion, type, useHermes);
         LOGGER.log(Level.INFO, "REQ: " + req);
         return req;
     }
