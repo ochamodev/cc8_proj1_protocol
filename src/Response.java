@@ -30,6 +30,10 @@ public class Response {
         return responseBody;
     }
 
+    public long getResponseLength() {
+        return this.getResponseLength();
+    }
+
     private Response(ResponseBuilder builder) {
         this.status = builder.status;
         this.statusMessage = builder.statusMessage;
@@ -46,6 +50,7 @@ public class Response {
         private String contentType;
         private byte[] responseBody;
         private String responseString;
+        private long responseLength;
         private static String CRLF = "\r\n";
 
         public ResponseBuilder setStatus(String status) {
@@ -73,9 +78,17 @@ public class Response {
             return this;
         }
 
+        public ResponseBuilder setResponseLength(long responseLength) {
+            this.responseLength = responseLength;
+            return this;
+        }
+
         public Response build() {
             StringBuilder builder = new StringBuilder();
-            int contentLength = htmlContent.length();
+            long contentLength = htmlContent.length();
+            if (contentLength == 0) {
+                contentLength = responseLength;
+            }
             if (responseBody == null) {
                 this.responseString = builder
                     .append(String.format("HTTP/1.1 %s %s", status, statusMessage))
@@ -94,7 +107,7 @@ public class Response {
                     .append("\n")
                     .append(String.format("Content-type: %s", contentType))
                     .append(CRLF)
-                    .append(String.format("Content-length: %d", contentLength))
+                    .append(String.format("Content-length: %d", responseLength))
                     .append(CRLF)
                     .toString();
             }

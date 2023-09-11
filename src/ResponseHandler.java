@@ -85,6 +85,7 @@ public class ResponseHandler {
                         .setStatus(StatusCodesAndMessage.SUCCESS)
                         .setStatusMessage(StatusCodesAndMessage.SUCCESS_MESSAGE)
                         .setResponseBody(content)
+                        .setResponseLength(content.length)
                         .setHtmlContent("")
                         .setContentType(requestObj.type())
                         .build();

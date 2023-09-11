@@ -59,7 +59,7 @@ public class ClientHandler implements Runnable {
             var reqHandler = new RequestHandler(LOGGER);
             var reqObj = reqHandler.handleRequest(requestBuilder.toString().trim());
 
-            if (reqObj.isHermesRequest()) {
+            if (!reqObj.isHermesRequest()) {
                 var responseGenerator = new ResponseHandler(LOGGER);
 
                 var response = responseGenerator.createResponse(reqObj, requestBodyString);
@@ -77,7 +77,8 @@ public class ClientHandler implements Runnable {
                     outputStream.write(response.getResponseBody());
                 }
             } else {
-                HermesServerSide hermesServerSide = new HermesServerSide(LOGGER, outputStream)
+                HermesServerSide hermesServerSide = new HermesServerSide(LOGGER, outputStream, writer);
+                hermesServerSide.handleImages(reqObj);
             }
 
             reader.close();

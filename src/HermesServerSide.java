@@ -1,4 +1,5 @@
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.logging.Logger;
 
 public class HermesServerSide {
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = 8192;
 
     private OutputStream clientStream;
     private PrintWriter writer;
@@ -38,8 +39,31 @@ public class HermesServerSide {
 
     public void handleImages(RequestObj request) {
         try {
-            if (FileUtils.checkIfFileExists(request.path(), LOGGER)) {
-                
+            String fullPath = HTML_ROOT + request.path();
+            if (FileUtils.checkIfFileExists(fullPath, LOGGER)) {
+
+                File file = new File(fullPath);
+
+                var length = file.length();
+                Response response = new Response.ResponseBuilder()
+                        .setStatus(StatusCodesAndMessage.SUCCESS)
+                        .setStatusMessage(StatusCodesAndMessage.SUCCESS_MESSAGE)
+                        .setResponseLength(length)
+                        .setHtmlContent("")
+                        .setContentType(request.type())
+                        .build();
+                writer.println(response.getResponseString());
+                FileInputStream fileInputStream = new FileInputStream(fullPath);
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+                // read file in chunks
+                byte[] bufferedImage = new byte[BUFFER_SIZE];
+                int bytesReaded = 0;
+                while (((bytesReaded = bufferedInputStream.read(bufferedImage)) != -1)) {
+                    clientStream.write(bufferedImage, 0, bytesReaded);
+                }
+                bufferedInputStream.close();
+                fileInputStream.close();
+                //clientStream.close();
             } else {
                 Response response = notFoundResponse();
                 writer.println(response.getResponseString());
