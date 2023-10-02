@@ -87,6 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
+    function isValidJson(data) {
+        try {
+            JSON.parse(data);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
     function getImageType(filename) {
         const extensionMatch = /\.([a-zA-Z0-9]+)$/.exec(filename);
         console.log(extensionMatch)
