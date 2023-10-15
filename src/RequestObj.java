@@ -3,6 +3,7 @@ public record RequestObj(
     String path,
     String httpVersion,
     String type,
+    int hermesStep,
     boolean isHermesRequest
     ) {
 

@@ -46,15 +46,22 @@ public class RequestHandler {
         }
         LOGGER.log(Level.INFO, "[pathWithoutSplit]: " + path);
         boolean useHermes = false;
+        int hermesStep = -1;
         if (path.contains("?")) {
             String params = path.split("\\?")[1];
             path = path.split("\\?")[0];
             useHermes = params.contains("hermes=true");
+            if (params.contains("hermesStep=1")) {
+                hermesStep = 1;
+            }
+            if (params.contains("hermesStep=2")) {
+                hermesStep = 2;
+            }
             LOGGER.log(Level.INFO, "[pathWithSplit]: " + path);
             LOGGER.log(Level.INFO, "[params]" +params);
         }
 
-        var req = new RequestObj(method, path, httpVersion, type, useHermes);
+        var req = new RequestObj(method, path, httpVersion, type, hermesStep, useHermes);
         LOGGER.log(Level.INFO, "REQ: " + req);
         return req;
     }

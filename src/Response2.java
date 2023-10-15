@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Response {
+public class Response2 {
     private String status;
     private String statusMessage;
     private String htmlContent;
@@ -42,7 +42,7 @@ public class Response {
         return this.headers;
     }
 
-    private Response(ResponseBuilder builder) {
+    private Response2(ResponseBuilder2 builder) {
         this.status = builder.status;
         this.statusMessage = builder.statusMessage;
         this.htmlContent = builder.htmlContent;
@@ -52,7 +52,7 @@ public class Response {
         this.headers = builder.headers;
     }
 
-    public static class ResponseBuilder {
+    public static class ResponseBuilder2 {
         private String status;
         private String statusMessage;
         private String htmlContent;
@@ -63,72 +63,75 @@ public class Response {
         private static String CRLF = "\r\n";
         private Map<String, String> headers = new HashMap<>();
 
-        public ResponseBuilder setStatus(String status) {
+        public ResponseBuilder2 setStatus(String status) {
             this.status = status;
             return this;
         }
 
-        public ResponseBuilder setStatusMessage(String statusMessage) {
+        public ResponseBuilder2 setStatusMessage(String statusMessage) {
             this.statusMessage = statusMessage;
             return this;
         }
 
-        public ResponseBuilder setHtmlContent(String htmlContent) {
+        public ResponseBuilder2 setHtmlContent(String htmlContent) {
             this.htmlContent = htmlContent;
             return this;
         }
 
-        public ResponseBuilder setContentType(String contentType) {
+        public ResponseBuilder2 setContentType(String contentType) {
             this.contentType = contentType;
             return this;
         }
 
-        public ResponseBuilder setResponseBody(byte[] responseBody) {
+        public ResponseBuilder2 setResponseBody(byte[] responseBody) {
             this.responseBody = responseBody;
             return this;
         }
 
-        public ResponseBuilder setResponseLength(long responseLength) {
+        public ResponseBuilder2 setResponseLength(long responseLength) {
             this.responseLength = responseLength;
             return this;
         }
 
-        public ResponseBuilder addHeader(String header, String headerValue) {
+        public ResponseBuilder2 addHeader(String header, String headerValue) {
             this.headers.put(header, headerValue);
             return this;
         }
 
-        public Response build() {
+        public Response2 build() {
             StringBuilder builder = new StringBuilder();
             long contentLength = htmlContent.length();
             if (contentLength == 0) {
                 contentLength = responseLength;
             }
             if (responseBody == null) {
-                this.responseString = builder
+                    builder
                     .append(String.format("HTTP/1.1 %s %s", status, statusMessage))
-                    .append("\n")
-                    .append(String.format("Content-type: %s", contentType))
-                    .append(CRLF)
-                    .append(String.format("Content-length: %d", contentLength))
-                    .append(CRLF)
+                    .append("\n");
+                    for (Map.Entry<String, String> entry: headers.entrySet()) {
+                        builder.append(String.format("%s: %s", entry.getKey(), entry.getValue()))
+                        .append(CRLF);
+                    }
+                    this.responseString = builder
                     .append(CRLF)
                     .append(htmlContent.trim())
                     .toString();
             } else {
                 contentLength = responseBody.length;
-                this.responseString = builder
+                    builder
                     .append(String.format("HTTP/1.1 %s %s", status, statusMessage))
-                    .append("\n")
-                    .append(String.format("Content-type: %s", contentType))
-                    .append(CRLF)
-                    .append(String.format("Content-length: %d", responseLength))
+                    .append("\n");
+                    for (Map.Entry<String, String> entry: headers.entrySet()) {
+                        builder.append(String.format("%s: %s", entry.getKey(), entry.getValue()))
+                        .append(CRLF);
+                    }
+                    this.responseString = builder
                     .append(CRLF)
                     .toString();
             }
             
 
-            return new Response(this);
+            return new Response2(this);
         }
     }
 

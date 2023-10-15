@@ -1,90 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
     const elementsWithHermesSrc = document.querySelectorAll('[hermes-src]');
 
-    elementsWithHermesSrc.forEach(element => {
+    elementsWithHermesSrc.forEach(async element => {
         const resource = element.getAttribute('hermes-src');
         const dataType = getImageType(resource);
-        console.debug("requested resource: " + resource);
-        console.log("resource type: " + JSON.stringify(dataType));
-        fetch(resource + '?hermes=true')
-            .then((response) => {
-                const reader = response.body.getReader();
-                let imageData = [];
-                return new ReadableStream({
-                    async start(controller) {
-                        try {
-                            while (true) {
-                                const { done, value } = await reader.read();
-                                if (done) {
-                                    imageData[0] = imageData[0].slice(1);
-                                    //console.log(imageData[0]);
-                                    const blob = new Blob(imageData, { type: dataType.ext });
-                                    const imageUrl = URL.createObjectURL(blob);
-                                    /*console.log(imageUrl);
-                                    element.src = imageUrl;
-                                    console.log(element);
-                                    controller.close();*/
-                                    //element.addEventListener('load', () => URL.revokeObjectURL(imageUrl));
-                                    element.src = imageUrl;
-                                    console.log("done");
-                                    controller.close();
-                                    break;
-                                }
-                                imageData.push(value);
-                            }
-                        } catch (error) {
-                            console.error("error processing chunks: ", error);
-                        }
-                        /*start(controller) {
-                            return pump();
-    
-                            function pump() {
-                                return reader.read().then(({ done, value }) => {
-                                    // When no more data needs to be consumed, close the stream
+        console.log("heigth: " + element.clientHeight);
+        console.log("width: " + element.clientWidth);
+        //console.debug("requested resource: " + resource);
+        //console.log("resource type: " + JSON.stringify(dataType));
+        //const response = await fetch(resource + '?hermes=true&hermesStep=1');
+        if (true) {
+            //console.log(response.headers);
+            fetch(resource + '?hermes=true&hermesStep=2')
+                .then((response) => {
+                    console.log(response);
+                    const reader = response.body.getReader();
+                    let imageData = [];
+                    return new ReadableStream({
+                        async start(controller) {
+                            try {
+                                var index = 0;
+                                while (true) {
+                                    const { done, value } = await reader.read();
                                     if (done) {
+                                        imageData[0] = imageData[0].slice(1);
+                                
+                                        const blob = new Blob(imageData, { type: dataType.ext });
+                                        const imageUrl = URL.createObjectURL(blob);
+                                        element.onload="this.style.display = 'block'"
+                                        element.src = imageUrl;
+                                        console.log(resource);
+                                        console.log("done");
                                         controller.close();
-                                        return;
+                                        break;
                                     }
-                                    // Enqueue the next data chunk into our target stream
-                                    controller.enqueue(value);
-                                    return pump();
-                                });
-                            }
-    
-                            while (true) {
-                                const { done, value } = await reader.read();
-                                if (done) {
-                                    console.log("Stream done");
-                                    break;
+
+                                    imageData.push(value);
+                                    index++;
                                 }
-                                //console.debug("VALUE: " +value);
-                                imageData.push(value);
-                                
-                                
+                            } catch (error) {
+                                console.error("error processing chunks: ", error);
                             }
-                           
-                            const concatenatedData = new Uint8Array(imageData.reduce((acc, chunk) => acc.concat(Array.from(chunk)), []));
-    
-                            console.log("hello");
-                            const blob = new Blob(imageData, {type: 'image/png'});
-                            const imageUrl = URL.createObjectURL(blob);
-                            element.src = imageUrl;
-                            console.log("close");
-                            controller.close()*/
-                    },
+                        },
+                    });
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
                 });
-            })
-            //.then((stream) => new Response(stream))
-            //.then((response) => response.blob())
-            //.then((blob) => URL.createObjectURL(blob))
-            // Update image
-            /*.then((url) => {
-                element.src = url;
-                console.log(element);
-            })*/
-            .catch(error => {
-                console.error("Error: ", error);
-            });
+        }
+
     });
 
     function isValidJson(data) {
@@ -133,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             ];
 
-            return imageTypes.find((it) => it.ext === extension );
+            return imageTypes.find((it) => it.ext === extension);
         }
     }
 

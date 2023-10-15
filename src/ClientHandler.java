@@ -78,7 +78,11 @@ public class ClientHandler implements Runnable {
                 }
             } else {
                 HermesServerSide hermesServerSide = new HermesServerSide(LOGGER, outputStream, writer);
-                hermesServerSide.handleImages(reqObj);
+                if (reqObj.hermesStep() == 1) {
+                    hermesServerSide.provideImageInfo(reqObj);
+                } else {
+                    hermesServerSide.handleImages4(reqObj);
+                }
             }
 
             reader.close();
