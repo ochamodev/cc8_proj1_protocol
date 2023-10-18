@@ -14,7 +14,8 @@ public class FileUtils {
             String currentWorkingDir = System.getProperty("user.dir");
             logger.log(Level.INFO, "Current Working Directory: " + currentWorkingDir);
             File file = new File(filePath);
-            return file.exists();
+            boolean exists = file.exists();
+            return exists;
         } catch (Exception e) {
             logger.log(Level.INFO, e.getMessage());
             return false;

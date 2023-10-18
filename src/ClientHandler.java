@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable {
                 if (reqObj.hermesStep() == 1) {
                     hermesServerSide.provideImageInfo(reqObj);
                 } else {
-                    hermesServerSide.handleImages4(reqObj);
+                    hermesServerSide.handleChunkedImage(reqObj);
                 }
             }
 

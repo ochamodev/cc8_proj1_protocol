@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                     const { done, value } = await reader.read();
                                     if (done) {
                                         imageData[0] = imageData[0].slice(1);
-                                
                                         const blob = new Blob(imageData, { type: dataType.ext });
                                         const imageUrl = URL.createObjectURL(blob);
                                         element.onload="this.style.display = 'block'"
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         controller.close();
                                         break;
                                     }
-
+                                    //console.log("value = ", value);
                                     imageData.push(value);
                                     index++;
                                 }
@@ -51,14 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-    function isValidJson(data) {
-        try {
-            JSON.parse(data);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
 
     function getImageType(filename) {
         const extensionMatch = /\.([a-zA-Z0-9]+)$/.exec(filename);
