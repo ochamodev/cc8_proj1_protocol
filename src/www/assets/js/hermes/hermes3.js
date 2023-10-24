@@ -68,12 +68,12 @@ document.addEventListener("DOMContentLoaded", () => {
             let imgHeight = headers.get(imgHeightHeader);
             let chunkSrc = headers.get(chunkLocationHeader);
             let chunkName = headers.get(chunkNameHeader);
-            const sliceWidth = imgWidth / colCount;
-            const sliceHeight = imgHeight / rowCount;
+            //const sliceWidth = imgWidth / colCount;
+            //const sliceHeight = imgHeight / rowCount;
 
             let chunkSize = elementWidth / colCount;
-            console.log("chunkSize = ", chunkSize)
-            console.log("sliceWidth = ", sliceWidth, "sliceHeight = ", sliceHeight)
+            //console.log("chunkSize = ", chunkSize)
+            //console.log("sliceWidth = ", sliceWidth, "sliceHeight = ", sliceHeight)
             for (let row = 0; row < rowCount; row++) {
                 for (let col = 0; col < colCount; col++) {
                     let imagePath = `${chunkSrc}${chunkName}${row}_${col}.${dataType.ext}`;

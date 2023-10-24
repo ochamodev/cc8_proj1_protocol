@@ -46,7 +46,7 @@ public class HermesServerSide {
                 String manifest = parentDir.concat("/").concat(fileName).concat("chunks").concat("/manifest.txt");
                 String chunkLocation = parentDir.concat("/").concat(fileName).concat("chunks/");
                 String chunkName = "img_";
-                File manifestFile2 = new File(manifest);
+                //File manifestFile2 = new File(manifest);
                 if (FileUtils.checkIfFileExists(manifest, LOGGER)) {
                     File manifestFile = new File(manifest);
                     BufferedReader manifestReader = new BufferedReader(new FileReader(manifestFile));
