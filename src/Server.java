@@ -22,7 +22,7 @@ public class Server {
     private static Logger LOGGERClient;
 
     public Server(String[] argv){
-        Integer count = (argv.length>0)?Integer.parseInt(argv[0]):18;
+        Integer count = (argv.length>0)?Integer.parseInt(argv[0]):32;
         out.println( "#Theads: " + count );
         out.println( this.getClass() );
         LOGGERServer = this.initLogger(LOGGERServer, this.getClass().getName());

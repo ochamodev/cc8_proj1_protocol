@@ -56,15 +56,11 @@ public class HermesServerSide {
                         String[] data = rowColumnInfo.split(";");
                         int rowCount = Integer.parseInt(data[0]);
                         int colCount = Integer.parseInt(data[1]);
-                        int imgWidth = Integer.parseInt(data[2]);
-                        int imgHeight = Integer.parseInt(data[3]);
                         Response2 response2 = new Response2.ResponseBuilder2()
                                 .setStatus(StatusCodesAndMessage.SUCCESS)
                                 .setStatusMessage(StatusCodesAndMessage.SUCCESS_MESSAGE)
                                 .addHeader("hermes-chunk-row-count", Integer.toString(rowCount))
                                 .addHeader("hermes-chunk-col-count", Integer.toString(colCount))
-                                .addHeader("hermes-img-width", Integer.toString(imgWidth))
-                                .addHeader("hermes-img-height", Integer.toString(imgHeight))
                                 .addHeader("hermes-chunk-src", chunkLocation.replace("./src/www/", ""))
                                 .addHeader("hermes-chunk-name", chunkName)
                                 .setHtmlContent("")

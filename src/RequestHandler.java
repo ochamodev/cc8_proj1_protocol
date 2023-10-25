@@ -43,6 +43,10 @@ public class RequestHandler {
             type = MimeTypes.JS_TYPE;
         } else if (path.contains(".png")) {
             type = MimeTypes.PNG_TYPE;
+        } else if (path.contains("jpg")) {
+            type = MimeTypes.JPG_TYPE;
+        } else if (path.contains("jpeg")) {
+            type = MimeTypes.JPEG_TYPE;
         }
         LOGGER.log(Level.INFO, "[pathWithoutSplit]: " + path);
         boolean useHermes = false;

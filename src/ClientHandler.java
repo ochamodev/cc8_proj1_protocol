@@ -80,8 +80,26 @@ public class ClientHandler implements Runnable {
                 HermesServerSide hermesServerSide = new HermesServerSide(LOGGER, outputStream, writer);
                 if (reqObj.hermesStep() == 1) {
                     hermesServerSide.provideImageInfo(reqObj);
-                } else {
-                    hermesServerSide.handleChunkedImage(reqObj);
+                }
+
+                if (reqObj.hermesStep() == 2) {
+                    
+                    var responseGenerator = new ResponseHandler(LOGGER);
+
+                    var response = responseGenerator.createResponse(reqObj, requestBodyString);
+                    LOGGER.log(Level.INFO, "[response] \n" + response.getResponseString());
+                    writer.println(response.getResponseString());
+                    // implementación protodo aquí de imagenes
+
+                    /*
+                     * if (response.getResponseBody() != null) {
+                     * outputStream.write(response.getResponseBody());
+                     * }
+                     */
+
+                    if (response.getResponseBody() != null) {
+                        outputStream.write(response.getResponseBody());
+                    }
                 }
             }
 
